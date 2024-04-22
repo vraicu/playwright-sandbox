@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: lts/*
       - name: Set wd
-        run: cd ./todo-app
+        run: ls -l
       - name: Install dependencies
         run: npm ci
       - name: Install Playwright Browsers
