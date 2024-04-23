@@ -1,4 +1,5 @@
 import type { Page, Locator } from "@playwright/test";
+
 export class TodoPage {
   private readonly editInputBox: Locator;
   private readonly completeAll: Locator;
@@ -26,6 +27,10 @@ export class TodoPage {
     await this.completeAll.check();
   }
 
+  async unmarkAllComplete() {
+    await this.completeAll.uncheck();
+  }
+
   async removeAllCompleted() {
     await this.clearCompleted.click();
   }
@@ -42,12 +47,10 @@ export class TodoPage {
   }
 
   async clearTodo(index: number, length: number) {
-    await this.page.getByTestId("todo-title").nth(index).dblclick();
-
-    while (length > 0) {
-      await this.editInputBox.nth(index).press("Backspace");
-      length--;
-    }
+    const todo = this.page.getByTestId("todo-title").nth(index);
+    await todo.dblclick();
+    await this.editInputBox.nth(index).press("Meta+a");
+    await this.editInputBox.nth(index).press("Backspace");
   }
 
   async submitChanges(index: number) {

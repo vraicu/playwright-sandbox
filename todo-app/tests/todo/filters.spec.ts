@@ -40,6 +40,18 @@ test.describe("When active filter is selected", () => {
     await expect(todoPage.todoItems).toHaveCount(1);
     await expect(todoPage.todoItems.nth(0)).toHaveText("Walk the dog");
   });
+
+  test.describe("and click mark all complete", () => {
+    test("should refresh list", async () => {
+      await todoPage.addToDos(...["Walk the dog", "Buy more treats"]);
+
+      await todoPage.selectFilter("Active");
+      await todoPage.markAllComplete();
+
+      await expect(todoPage.todoCount).toHaveText("0 items left");
+      await expect(todoPage.todoItems).toHaveCount(0);
+    });
+  });
 });
 
 test.describe("When completed filter is selected", () => {
@@ -61,5 +73,18 @@ test.describe("When completed filter is selected", () => {
     await expect(todoPage.todoCount).toHaveText("1 item left");
     await expect(todoPage.todoItems).toHaveCount(1);
     await expect(todoPage.todoItems.nth(0)).toHaveText("Buy more treats");
+  });
+
+  test.describe("and click mark all incomplete", () => {
+    test("should refresh list", async () => {
+      await todoPage.addToDos(...["Walk the dog", "Buy more treats"]);
+      await todoPage.markAllComplete();
+
+      await todoPage.selectFilter("Completed");
+      await todoPage.unmarkAllComplete();
+
+      await expect(todoPage.todoCount).toHaveText("2 items left");
+      await expect(todoPage.todoItems).toHaveCount(0);
+    });
   });
 });

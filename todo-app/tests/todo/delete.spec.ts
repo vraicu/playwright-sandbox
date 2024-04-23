@@ -70,6 +70,37 @@ test.describe("When I hover over a todo item, click on the remove button", () =>
   });
 });
 
+const filters = ["All", "Active", "Completed"];
+for (const filter of filters) {
+  test.describe(`When ${filter} is selected`, () => {
+    let todoPage: TodoPage;
+
+    test.beforeEach(async ({ page }) => {
+      todoPage = new TodoPage(page);
+      await todoPage.goto();
+    });
+
+    test("should be able to remove todo item by clicking delete", async ({
+      page,
+    }) => {
+      const todo = "Do laundry";
+      await todoPage.addToDo(todo);
+      if (filter === "Completed") {
+        await todoPage.markAsComplete(todo);
+      }
+
+      await todoPage.selectFilter(filter);
+      await todoPage.remove(todo);
+
+      await expect(todoPage.todoCount).not.toBeVisible();
+      const todos = await page.evaluate(() =>
+        JSON.parse(localStorage["react-todos"])
+      );
+      expect(todos).toHaveLength(0);
+    });
+  });
+}
+
 test.describe("When I clear completed todo items", () => {
   let todoPage: TodoPage;
 
