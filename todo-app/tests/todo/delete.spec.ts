@@ -96,3 +96,18 @@ test.describe("When I clear completed todo items", () => {
     );
   });
 });
+
+test.describe("When there are no completed todo items", () => {
+  let todoPage: TodoPage;
+
+  test.beforeEach(async ({ page }) => {
+    todoPage = new TodoPage(page);
+    await todoPage.goto();
+  });
+
+  test("clear completed is not visible", async () => {
+    await todoPage.addToDos(...["Groceries", "Cook dinner", "Buy flowers"]);
+
+    await expect(todoPage.clearCompleted).not.toBeVisible();
+  });
+});

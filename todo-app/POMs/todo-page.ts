@@ -2,7 +2,7 @@ import type { Page, Locator } from "@playwright/test";
 export class TodoPage {
   private readonly editInputBox: Locator;
   private readonly completeAll: Locator;
-  private readonly clearCompleted: Locator;
+  public readonly clearCompleted: Locator;
   private readonly inputBox: Locator;
   public readonly todoItems: Locator;
   public readonly todoCount: Locator;
@@ -82,5 +82,17 @@ export class TodoPage {
       await this.todoItems.first().hover();
       await this.todoItems.getByLabel("Delete").first().click();
     }
+  }
+
+  getFilter(text: string) {
+    return this.page
+      .getByRole("listitem")
+      .filter({ hasText: text })
+      .getByRole("link");
+  }
+
+  async selectFilter(text: string) {
+    const filter = this.getFilter(text);
+    await filter.click();
   }
 }
