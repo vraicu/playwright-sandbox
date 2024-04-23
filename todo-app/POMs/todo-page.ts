@@ -3,7 +3,7 @@ export class TodoPage {
   private readonly editInputBox: Locator;
   private readonly completeAll: Locator;
   private readonly clearCompleted: Locator;
-  public readonly inputBox: Locator;
+  private readonly inputBox: Locator;
   public readonly todoItems: Locator;
   public readonly todoCount: Locator;
 
@@ -48,6 +48,21 @@ export class TodoPage {
       await this.editInputBox.nth(index).press("Backspace");
       length--;
     }
+  }
+
+  async submitChanges(index: number) {
+    await this.editInputBox.nth(index).press("Enter");
+  }
+
+  getTodo(text: string) {
+    return this.todoItems.filter({ hasText: text });
+  }
+
+  async markAsComplete(text: string) {
+    const todo = this.todoItems.filter({
+      hasText: text,
+    });
+    await todo.locator("input.toggle").check();
   }
 
   async editTodo(index: number, text: string) {
