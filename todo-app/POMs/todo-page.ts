@@ -1,4 +1,5 @@
 import type { Page, Locator } from "@playwright/test";
+import os from "os";
 
 export class TodoPage {
   private readonly editInputBox: Locator;
@@ -49,7 +50,8 @@ export class TodoPage {
   async clearTodo(index: number, length: number) {
     const todo = this.page.getByTestId("todo-title").nth(index);
     await todo.dblclick();
-    await this.editInputBox.nth(index).press("Meta+a");
+    const key = os.platform() === "darwin" ? "Meta" : "Control";
+    await this.editInputBox.nth(index).press(`${key}+a`);
     await this.editInputBox.nth(index).press("Backspace");
   }
 
