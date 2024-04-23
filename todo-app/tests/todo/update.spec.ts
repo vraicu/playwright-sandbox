@@ -12,7 +12,6 @@ test.describe("When updating a todo item", () => {
   test("should not impact the count of left items", async () => {
     await todoPage.addToDos(...["Get flowers", "Wash car"]);
 
-    await todoPage.clearTodo(1, "Wash car".length);
     await todoPage.editTodo(1, "Wash dishes");
 
     await expect(todoPage.todoCount).toHaveText("2 items left");
@@ -21,7 +20,6 @@ test.describe("When updating a todo item", () => {
   test("should update the list", async () => {
     await todoPage.addToDos(...["Get flowers", "Wash car"]);
 
-    await todoPage.clearTodo(1, "Wash car".length);
     await todoPage.editTodo(1, "Wash dishes");
 
     await expect(todoPage.todoItems.nth(0)).toHaveText("Get flowers");
@@ -32,7 +30,6 @@ test.describe("When updating a todo item", () => {
     const todoItems = ["Get flowers", "Wash car"];
     await todoPage.addToDos(...todoItems);
 
-    await todoPage.clearTodo(0, "Get flowers".length);
     await todoPage.editTodo(0, "Wash dishes");
 
     const todos = await page.evaluate(() =>

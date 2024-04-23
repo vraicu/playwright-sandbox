@@ -51,6 +51,7 @@ export class TodoPage {
   }
 
   async editTodo(index: number, text: string) {
+    await this.page.getByTestId("todo-title").nth(index).dblclick();
     await this.editInputBox.nth(index).fill(text);
     await this.editInputBox.nth(index).blur();
   }
