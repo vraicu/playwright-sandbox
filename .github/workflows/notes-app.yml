@@ -21,7 +21,8 @@ jobs:
           touch .env
           echo USERNAME=${{secrets.USERNAME}} >> .env
           echo PASSWORD=${{secrets.PASSWORD}} >> .env
-          cat .env
+          echo GOOGLE_USER=${{secrets.USERNAME}} >> .env
+          echo GOOGLE_PASS=${{secrets.GOOGLE_PASS}} >> .env
       - name: Install dependencies
         working-directory: ./notes-app
         run: npm ci
