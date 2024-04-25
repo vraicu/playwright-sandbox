@@ -24,7 +24,7 @@ export default async function globalSetup(config: FullConfig) {
   const browser = await firefox.launch();
   const page = await browser.newPage();
 
-  await logAsGoogleUser(page);
+  // await logAsGoogleUser(page);
 
   await browser.close();
 }
