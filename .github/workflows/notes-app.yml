@@ -19,8 +19,8 @@ jobs:
         working-directory: ./notes-app
         run: |
           touch .env
-          echo USERNAME=${{ secrets.REGULAR_USER}} > .env
-          echo PASSWORD=${{ secrets.REGULAR_PASS}} > .env
+          echo USERNAME=${{ secrets.REGULAR_USER }} >> .env
+          echo PASSWORD=${{ secrets.REGULAR_PASS }} >> .env
       - name: Install dependencies
         working-directory: ./notes-app
         run: npm ci
