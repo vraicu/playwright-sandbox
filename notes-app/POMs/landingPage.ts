@@ -20,10 +20,10 @@ export class LandingPage {
   }
 
   async goto() {
-    await this.page.goto("/");
+    await this.page.goto("https://practice.expandtesting.com/notes/app");
   }
 
-  async login() {
+  async clickLogin() {
     await this.loginButton.click();
   }
 

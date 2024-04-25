@@ -37,6 +37,8 @@ export class HomePage {
   private readonly workNotesButton: Locator;
   private readonly personalNotesButton: Locator;
 
+  public readonly Url: string = "https://practice.expandtesting.com/notes/app";
+
   constructor(public readonly page: Page) {
     this.profileButton = this.page.getByTestId("profile");
     this.logoutButton = this.page.getByTestId("logout");
@@ -57,6 +59,10 @@ export class HomePage {
     this.homeNotesButton = this.page.getByTestId("category-home");
     this.workNotesButton = this.page.getByTestId("category-work");
     this.personalNotesButton = this.page.getByTestId("category-personal");
+  }
+
+  async goto() {
+    await this.page.goto(this.Url);
   }
 
   async addNewNote(note: Note) {

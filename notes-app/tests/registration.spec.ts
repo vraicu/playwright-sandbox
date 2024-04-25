@@ -1,17 +1,39 @@
 import { test, expect } from "@playwright/test";
+import { RegistrationPage, RegistrationForm } from "../POMs/registrationPage";
 
-test("Should be able to register", async ({ page }) => {
+test("After clicking Create an account the registration form should be visible", async ({
+  page,
+}) => {
+  const registrationPage = new RegistrationPage(page);
   await page.goto("https://practice.expandtesting.com/notes/app");
   await page.getByRole("link").filter({ hasText: "Create an account" }).click();
-  await page
-    .getByTestId("register-email")
-    .fill(`${Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)}@mail.com`);
-  await page.getByTestId("register-name").fill("John Doe");
-  await page.getByTestId("register-password").fill(process.env.PASSWORD);
-  await page
-    .getByTestId("register-confirm-password")
-    .fill(process.env.PASSWORD);
-  await page.getByRole("button").filter({ hasText: "Register" }).click();
+
+  await expect(
+    page.getByRole("heading").filter({ hasText: "Register" })
+  ).toBeVisible();
+  await expect(registrationPage.emailAddressInput).toBeVisible();
+  await expect(registrationPage.nameInput).toBeVisible();
+  await expect(registrationPage.passwordInput).toBeVisible();
+  await expect(registrationPage.confirmPasswordInput).toBeVisible();
+  await expect(registrationPage.registerButton).toBeVisible();
+  await expect(registrationPage.registerWithGoogleButton).toBeVisible();
+  await expect(registrationPage.registerWithLinkedInButton).toBeVisible();
+  await expect(
+    page.locator("span").filter({ hasText: "Do you have an account?" })
+  ).toBeVisible();
+  await expect(registrationPage.logInLink).toBeVisible();
+});
+
+test("Should be able to register", async ({ page }) => {
+  const registrationPage = new RegistrationPage(page);
+  const registrationForm: RegistrationForm = {
+    email: `${Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)}@mail.com`,
+    name: "John Doe",
+    password: process.env.PASSWORD ?? "ILJ(@*(EKJ2231))",
+  };
+  await registrationPage.goto();
+  await registrationPage.fillRegistrationForm(registrationForm);
+  await registrationPage.submitForm();
 
   await expect(
     page.getByRole("heading").filter({ hasText: "Register" })
@@ -27,17 +49,38 @@ test("Should be able to register", async ({ page }) => {
 test("Should display error when account is already in use", async ({
   page,
 }) => {
-  await page.goto("https://practice.expandtesting.com/notes/app");
-  await page.getByRole("link").filter({ hasText: "Create an account" }).click();
-  await page.getByTestId("register-email").fill(process.env.USERNAME);
-  await page.getByTestId("register-name").fill("John Doe");
-  await page.getByTestId("register-password").fill(process.env.PASSWORD);
-  await page
-    .getByTestId("register-confirm-password")
-    .fill(process.env.PASSWORD);
-  await page.getByRole("button").filter({ hasText: "Register" }).click();
+  const registrationPage = new RegistrationPage(page);
+  await registrationPage.goto();
+  const registrationForm: RegistrationForm = {
+    email: process.env.USERNAME ?? "john.doe@mail.com",
+    name: "John Doe",
+    password: process.env.PASSWORD ?? "ILJ(@*(EKJ2231))",
+  };
+  await registrationPage.fillRegistrationForm(registrationForm);
+  await registrationPage.submitForm();
 
   await expect(page.getByTestId("alert-message")).toHaveText(
     "An account already exists with the same email address"
   );
+});
+
+test("Should display error(s) when required fields are left empty", async ({
+  page,
+}) => {
+  const registrationPage = new RegistrationPage(page);
+  await registrationPage.goto();
+  await registrationPage.submitForm();
+
+  await expect(
+    page.getByText("Email address is required", { exact: true })
+  ).toBeVisible();
+  await expect(
+    page.getByText("Password is required", { exact: true })
+  ).toBeVisible();
+  await expect(
+    page.getByText("User name is required", { exact: true })
+  ).toBeVisible();
+  await expect(
+    page.getByText("Confirm Password is required", { exact: true })
+  ).toBeVisible();
 });

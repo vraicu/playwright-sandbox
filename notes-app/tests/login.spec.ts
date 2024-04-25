@@ -15,7 +15,7 @@ test.describe("As a regular user", () => {
 
   test("should be able to login", async ({ page }) => {
     const homePage = new HomePage(page);
-    await page.goto("https://practice.expandtesting.com/notes/app");
+    await homePage.goto();
 
     await expect(homePage.profileButton).toBeVisible();
   });

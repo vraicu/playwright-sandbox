@@ -1,14 +1,21 @@
 import { test as setup, expect } from "@playwright/test";
+import { LoginPage } from "../POMs/loginPage";
+import { LandingPage } from "../POMs/landingPage";
+import { HomePage } from "../POMs/homePage";
 
 setup("authenticate as regular user", async ({ page }) => {
-  await page.goto("https://practice.expandtesting.com/notes/app");
-  await page.getByRole("link").filter({ hasText: "Login" }).click();
-  await page.getByTestId("login-email").fill(process.env.USERNAME);
-  await page.getByTestId("login-password").fill(process.env.PASSWORD);
-  await page.getByRole("button").filter({ hasText: "Login" }).click();
-  await page.context().storageState({ path: "./.auth/regular_user.json" });
-  await page.waitForURL("https://practice.expandtesting.com/notes/app");
-  await expect(page.getByRole("link", { name: "Profile" })).toBeVisible();
+  const landingPage = new LandingPage(page);
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  await landingPage.goto();
+  await landingPage.clickLogin();
+  await loginPage.login({
+    username: process.env.USERNAME,
+    password: process.env.PASSWORD,
+  });
+
+  await page.waitForURL(homePage.Url);
+  await expect(homePage.profileButton).toBeVisible();
 
   await page.context().storageState({ path: ".auth/regular_user.json" });
 });
