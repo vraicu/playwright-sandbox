@@ -30,12 +30,24 @@ export class LoginPage {
   }
 
   async goto() {
-    await this.page.goto("/login");
+    await this.page.goto("https://practice.expandtesting.com/notes/app/login");
   }
 
   async login({ username, password }) {
+    await this.setEmail(username);
+    await this.setPassword(password);
+    await this.clickLogin();
+  }
+
+  async setEmail(username) {
     await this.emailAddressInput.fill(username);
+  }
+
+  async setPassword(password) {
     await this.passwordInput.fill(password);
+  }
+
+  async clickLogin() {
     await this.loginButton.click();
   }
 
