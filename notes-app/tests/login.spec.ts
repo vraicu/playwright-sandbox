@@ -12,15 +12,31 @@ import { LandingPage } from "../POMs/landingPage";
 //   await expect(homePage.profileButton).toBeVisible();
 // });
 
+test("Should be able to login", async ({ page }) => {
+  const landingPage = new LandingPage(page);
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  await landingPage.goto();
+  await landingPage.clickLogin();
+  await loginPage.login({
+    username: process.env.USERNAME,
+    password: process.env.PASSWORD,
+  });
+
+  await expect(page.getByText("MyNotes")).toBeVisible();
+  await expect(homePage.profileButton).toBeVisible();
+  await expect(homePage.logoutButton).toBeVisible();
+});
+
 test.describe("As a regular user", () => {
   test.use({ storageState: ".auth/regular_user_api.json" });
 
-  test("should be able to login", async ({ page }) => {
-    const homePage = new HomePage(page);
-    await homePage.goto();
+  // test("should be able to login", async ({ page }) => {
+  //   const homePage = new HomePage(page);
+  //   await homePage.goto();
 
-    await expect(homePage.profileButton).toBeVisible();
-  });
+  //   await expect(homePage.profileButton).toBeVisible();
+  // });
 
   test("should be able to logout", async ({ page }) => {
     const homePage = new HomePage(page);
@@ -41,8 +57,6 @@ test.describe("As a regular user", () => {
 });
 
 test.describe("When leaving email and password empty", () => {
-  test.use({ storageState: { cookies: [], origins: [] } });
-
   test("should display error", async ({ page }) => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
@@ -55,8 +69,6 @@ test.describe("When leaving email and password empty", () => {
 });
 
 test.describe("When using an invalid email address", () => {
-  test.use({ storageState: { cookies: [], origins: [] } });
-
   test("should display error", async ({ page }) => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
@@ -71,8 +83,6 @@ test.describe("When using an invalid email address", () => {
 });
 
 test.describe("When using a password less than 6 chars", () => {
-  test.use({ storageState: { cookies: [], origins: [] } });
-
   test("should display error", async ({ page }) => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
@@ -89,8 +99,6 @@ test.describe("When using a password less than 6 chars", () => {
 });
 
 test.describe("When using an invalid account", () => {
-  test.use({ storageState: { cookies: [], origins: [] } });
-
   test("should display error", async ({ page }) => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();

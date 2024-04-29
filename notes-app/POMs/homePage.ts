@@ -15,7 +15,7 @@ type Note = {
 
 export class HomePage {
   public readonly profileButton: Locator;
-  private readonly logoutButton: Locator;
+  public readonly logoutButton: Locator;
 
   // search
   private readonly searchInput: Locator;
