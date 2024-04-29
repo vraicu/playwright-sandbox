@@ -74,4 +74,8 @@ export class HomePage {
     await this.descriptionInput.fill(note.description);
     await this.createNoteButton.click();
   }
+
+  async logout() {
+    await this.logoutButton.click();
+  }
 }

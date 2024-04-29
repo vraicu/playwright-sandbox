@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { HomePage } from "../POMs/homePage";
 import { LoginPage } from "../POMs/loginPage";
+import { LandingPage } from "../POMs/landingPage";
 
 // test.use({ storageState: ".auth/google_user.json" });
 
@@ -19,6 +20,23 @@ test.describe("As a regular user", () => {
     await homePage.goto();
 
     await expect(homePage.profileButton).toBeVisible();
+  });
+
+  test("should be able to logout", async ({ page }) => {
+    const homePage = new HomePage(page);
+    await homePage.goto();
+    const landingPage = new LandingPage(page);
+
+    await homePage.logout();
+
+    await expect(page.getByText("Welcome to Notes App")).toBeVisible();
+    await expect(landingPage.loginButton).toBeVisible();
+    await expect(landingPage.createAnAccountButton).toBeVisible();
+    await expect(landingPage.forgotYourPasswordLink).toBeVisible();
+    await expect(
+      page.getByText("Connect with your Google account quickly.")
+    ).toBeVisible();
+    await expect(landingPage.connectWithGoogleAccountLink).toBeVisible();
   });
 });
 

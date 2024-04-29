@@ -1,10 +1,10 @@
 import type { Page, Locator } from "@playwright/test";
 
 export class LandingPage {
-  private readonly loginButton: Locator;
-  private readonly createAnAccountButton: Locator;
-  private readonly connectWithGoogleAccountLink: Locator;
-  private readonly forgotYourPasswordLink: Locator;
+  public readonly loginButton: Locator;
+  public readonly createAnAccountButton: Locator;
+  public readonly connectWithGoogleAccountLink: Locator;
+  public readonly forgotYourPasswordLink: Locator;
 
   constructor(public readonly page: Page) {
     this.loginButton = this.page.getByRole("link").filter({ hasText: "Login" });
