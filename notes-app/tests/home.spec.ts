@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { Categories, HomePage, Note } from "../POMs/homePage";
 
-test.use({ storageState: ".auth/regular_user_api.json" });
+test.use({ storageState: ".auth/regular_user.json" });
 
 test("Should be able to add a note", async ({ page }) => {
   const homePage = new HomePage(page);

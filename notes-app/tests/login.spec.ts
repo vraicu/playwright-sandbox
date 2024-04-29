@@ -29,7 +29,7 @@ test("Should be able to login", async ({ page }) => {
 });
 
 test.describe("As a regular user", () => {
-  test.use({ storageState: ".auth/regular_user_api.json" });
+  test.use({ storageState: ".auth/regular_user.json" });
 
   // test("should be able to login", async ({ page }) => {
   //   const homePage = new HomePage(page);
