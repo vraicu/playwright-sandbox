@@ -1,12 +1,12 @@
 import type { Page, Locator } from "@playwright/test";
 
-enum Categories {
+export enum Categories {
   Home = "Home",
   Work = "Work",
   Personal = "Personal",
 }
 
-type Note = {
+export type Note = {
   category: Categories;
   completed: boolean;
   title: string;
@@ -30,6 +30,10 @@ export class HomePage {
   private readonly createNoteButton: Locator;
   private readonly cancelNoteButton: Locator;
   private readonly closeNoteButton: Locator;
+
+  // notes
+  public readonly cardHeader: Locator;
+  public readonly cardBody: Locator;
 
   // categories
   private readonly allNotesButton: Locator;
@@ -59,6 +63,9 @@ export class HomePage {
     this.homeNotesButton = this.page.getByTestId("category-home");
     this.workNotesButton = this.page.getByTestId("category-work");
     this.personalNotesButton = this.page.getByTestId("category-personal");
+
+    this.cardHeader = this.page.getByTestId("note-card-title");
+    this.cardBody = this.page.getByTestId("note-card-description");
   }
 
   async goto() {
@@ -66,6 +73,7 @@ export class HomePage {
   }
 
   async addNewNote(note: Note) {
+    await this.addNoteButton.click();
     await this.categorySelect.selectOption(note.category);
     if (note.completed) {
       await this.completedCheckbox.check();
@@ -77,5 +85,57 @@ export class HomePage {
 
   async logout() {
     await this.logoutButton.click();
+  }
+
+  cardCompleteCheckbox(text: string): Locator {
+    return this.page
+      .getByTestId("note-card")
+      .filter({ hasText: text })
+      .getByTestId("toggle-note-switch");
+  }
+
+  async markNoteAsComplete(text: string) {
+    await this.cardCompleteCheckbox(text).check();
+  }
+
+  async markNoteAsIncomplete(text: string) {
+    await this.cardCompleteCheckbox(text).uncheck();
+  }
+
+  cardViewButton(text: string): Locator {
+    return this.page
+      .getByTestId("note-card")
+      .filter({ hasText: text })
+      .getByTestId("note-view");
+  }
+
+  async viewNote(text: string) {
+    await this.cardViewButton(text).click();
+  }
+
+  cardEditButton(text: string): Locator {
+    return this.page
+      .getByTestId("note-card")
+      .filter({ hasText: text })
+      .getByTestId("note-edit");
+  }
+
+  async editNote(text: string) {
+    await this.cardEditButton(text).click();
+  }
+
+  cardDeleteButton(text: string): Locator {
+    return this.page
+      .getByTestId("note-card")
+      .filter({ hasText: text })
+      .getByTestId("note-delete");
+  }
+
+  async deleteNote(text: string) {
+    await this.cardDeleteButton(text).click();
+  }
+
+  async confirmNoteDeletion() {
+    await this.page.getByTestId("note-delete-confirm").click();
   }
 }
