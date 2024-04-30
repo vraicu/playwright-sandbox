@@ -29,7 +29,7 @@ test("Should be able to login", async ({ page }) => {
 });
 
 test.describe("As a regular user", () => {
-  test.use({ storageState: ".auth/regular_user.json" });
+  test.use({ storageState: { cookies: [], origins: [] } });
 
   // test("should be able to login", async ({ page }) => {
   //   const homePage = new HomePage(page);
@@ -40,8 +40,14 @@ test.describe("As a regular user", () => {
 
   test("should be able to logout", async ({ page }) => {
     const homePage = new HomePage(page);
-    await homePage.goto();
     const landingPage = new LandingPage(page);
+    const loginPage = new LoginPage(page);
+    await landingPage.goto();
+    await landingPage.clickLogin();
+    await loginPage.login({
+      username: process.env.USERNAME,
+      password: process.env.PASSWORD,
+    });
 
     await homePage.logout();
 
